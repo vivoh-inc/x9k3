@@ -525,11 +525,14 @@ class X9K3(Stream):
             self.chk_stream_cues(pkt, pid)
         # self._is_sps(pkt)
         if self._pusi_flag(pkt):
-            self._parse_pts(pkt, pid)
-            if self._is_key(pkt):
-                self._mk_segment(pid)
-                if not self.start:
-                    self.start = True
+            try:
+                self._parse_pts(pkt, pid)
+                if self._is_key(pkt):
+                    self._mk_segment(pid)
+                    if not self.start:
+                        self.start = True
+            except:
+                print("Error in parsing packet")
         if self.start:
             self.active_segment.write(pkt)
 
